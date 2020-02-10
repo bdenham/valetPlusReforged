@@ -483,4 +483,28 @@ class Site
 
         return false;
     }
+
+    /**
+     * Resecure all currently secured sites with a fresh tld.
+     *
+     * @param  string  $oldTld
+     * @param  string  $tld
+     * @return void
+     */
+    function resecureForNewTld($oldTld, $tld)
+    {
+        if (! $this->files->exists($this->certificatesPath())) {
+            return;
+        }
+
+        $secured = $this->secured();
+
+        foreach ($secured as $url) {
+            $this->unsecure($url);
+        }
+
+        foreach ($secured as $url) {
+            $this->secure(str_replace('.'.$oldTld, '.'.$tld, $url));
+        }
+    }
 }

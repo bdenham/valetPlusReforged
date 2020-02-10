@@ -63,6 +63,31 @@ class DnsMasq
     }
 
     /**
+     * Update the TLD/domain resolved by DnsMasq.
+     *
+     * @param  string  $oldTld
+     * @param  string  $newTld
+     * @return void
+     */
+    function updateTld($oldTld, $newTld)
+    {
+        $this->files->unlink($this->resolverPath.'/'.$oldTld);
+        $this->files->unlink($this->dnsmasqUserConfigDir() . 'tld-' . $oldTld . '.conf');
+
+        $this->install($newTld);
+    }
+
+    /**
+     * Get the custom configuration path.
+     *
+     * @return string
+     */
+    function dnsmasqUserConfigDir()
+    {
+        return $_SERVER['HOME'].'/.config/valet/dnsmasq.d/';
+    }
+
+    /**
      * Copy the Homebrew installed example DnsMasq configuration file.
      *
      * @return void

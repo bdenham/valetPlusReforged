@@ -22,7 +22,7 @@ use Symfony\Component\Console\Question\Question;
 Container::setInstance(new Container);
 
 // get current version based on git describe and tags
-$version = new Version('1.2.0', __DIR__ . '/../');
+$version = new Version('1.5.0', __DIR__ . '/../');
 
 $app = new Application('Valet+ Reforged', $version->getVersion());
 
@@ -117,6 +117,27 @@ if (is_dir(VALET_HOME_PATH)) {
 
         info('Your Valet domain has been updated to ['.$domain.'].');
     })->descriptions('Get or set the domain used for Valet sites');
+
+    /**
+     * Get or set the TLD currently being used by Valet.
+     */
+    $app->command('tld [tld]', function ($tld = null) {
+        if ($tld === null) {
+            return info(Configuration::read()['tld']);
+        }
+
+        DnsMasq::updateTld(
+            $oldTld = Configuration::read()['tld'], $tld = trim($tld, '.')
+        );
+
+        Configuration::updateKey('tld', $tld);
+
+        Site::resecureForNewTld($oldTld, $tld);
+        PhpFpm::restart();
+        Nginx::restart();
+
+        info('Your Valet TLD has been updated to ['.$tld.'].');
+    }, ['domain'])->descriptions('Get or set the TLD used for Valet sites.');
 
     /**
      * Add the current working directory to the paths configuration.
@@ -966,6 +987,25 @@ if (is_dir(VALET_HOME_PATH)) {
 
         Logs::open($path);
     })->descriptions('Open the logs for the specified service. (php, php-fpm, nginx, mysql, mailhog, redis)');
+
+    /**
+     * Install the sudoers.d entries so password is no longer required.
+     */
+    $app->command('trust [--off]', function ($off) {
+        if ($off) {
+            Brew::removeSudoersEntry();
+            Valet::removeSudoersEntry();
+
+            return info('Sudoers entries have been removed for Brew and Valet.');
+        }
+
+        Brew::createSudoersEntry();
+        Valet::createSudoersEntry();
+
+        info('Sudoers entries have been added for Brew and Valet.');
+    })->descriptions('Add sudoers files for Brew and Valet to make Valet commands run without passwords', [
+        '--off' => 'Remove the sudoers files so normal sudo password prompts are required.'
+    ]);
 }
 
 /**
