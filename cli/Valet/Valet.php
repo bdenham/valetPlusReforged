@@ -67,7 +67,7 @@ class Valet
         $this->files->ensureDirExists(self::SUDOERS_PATH);
 
         $this->files->put(self::SUDOERS_PATH . '/valet', \sprintf('Cmnd_Alias VALET = %s *
-%admin ALL=(root) NOPASSWD:SETENV: VALET %s', $this->valetBin, PHP_EOL));
+%%admin ALL=(root) NOPASSWD:SETENV: VALET %s', $this->valetBin, PHP_EOL));
     }
 
     /**

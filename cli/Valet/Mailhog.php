@@ -72,8 +72,11 @@ class Mailhog extends AbstractService
         if (!$this->installed() || !$this->isEnabled()) {
             return;
         }
+        $domain = $this->configuration->read()['domain'];
+
 
         info('[mailhog] Restarting');
+        info('[mailhog] You can access mailhog with the following URL: ' . 'http://mailhog.' . $domain);
         $this->cli->quietlyAsUser('brew services restart mailhog');
     }
 

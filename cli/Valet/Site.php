@@ -355,9 +355,9 @@ class Site
      * @param string $path
      * @param string $url
      *
-     * @return string
+     * @return void
      */
-    public function buildCertificateConf(string $path, string $url): string
+    public function buildCertificateConf(string $path, string $url): void
     {
         $config = str_replace('VALET_DOMAIN', $url, $this->files->get(__DIR__ . self::STUBS_PATH . 'openssl.conf'));
         $this->files->putAsUser($path, $config);

@@ -144,11 +144,11 @@ class Filesystem
      * @param string $path
      * @param string $contents
      *
-     * @return string
+     * @return void
      */
-    public function putAsUser(string $path, string $contents): string
+    public function putAsUser(string $path, string $contents): void
     {
-        return $this->put($path, $contents, user());
+        $this->put($path, $contents, user());
     }
 
     /**

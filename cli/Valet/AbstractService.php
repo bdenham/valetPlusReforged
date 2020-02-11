@@ -47,7 +47,7 @@ abstract class AbstractService
     public function isEnabled(): bool
     {
         $config = $this->configuration->read();
-        $name   = $this->getConfigClassName();
+        $name = $this->getConfigClassName();
 
         return (isset($config[$name]) && isset($config[$name]['enabled']) && $config[$name]['enabled'] == self::STATE_ENABLED);
     }
@@ -59,8 +59,8 @@ abstract class AbstractService
      */
     public function setEnabled(bool $state): void
     {
-        $config        = $this->configuration->read();
-        $name          = $this->getConfigClassName();
+        $config = $this->configuration->read();
+        $name = $this->getConfigClassName();
         if (!isset($config[$name])) {
             $config[$name] = [];
         }
