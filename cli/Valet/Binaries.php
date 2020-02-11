@@ -28,7 +28,6 @@ class Binaries
      * ]
      *
      * @formatter:on
-     * @TODO: check N98_MAGERUN and N98_MAGERUN_2 urls + checksum
      */
     const SUPPORTED_CUSTOM_BINARIES = [
         self::N98_MAGERUN => [

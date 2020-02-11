@@ -19,6 +19,7 @@ Here are a few key differences compared to Valet+:
 - Fix MySQL Linking
 - Fix Memcache because of missing zlib
 - Fix missing Elasticsearch config
+- A lot more
 
 #### Coming soon…
 - Ioncube for PHP 7.4 (https://forum.ioncube.com/viewtopic.php?t=4542&postdays=0&postorder=asc&start=15)
