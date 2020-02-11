@@ -24,8 +24,6 @@ Here are a few key differences compared to Valet+:
 #### Coming soon…
 - Ioncube for PHP 7.4 (https://forum.ioncube.com/viewtopic.php?t=4542&postdays=0&postorder=asc&start=15)
 - MySQL 8 support
-- Refactoring Code
-- Shopware6 support
 - default installation php 7.4
 
 ## Installation
