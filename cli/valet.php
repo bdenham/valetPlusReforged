@@ -4,7 +4,7 @@
 /**
  * Load correct autoloader depending on install location.
  */
-if (file_exists(__DIR__.'/../vendor/autoload.php')) {
+if (\file_exists(__DIR__.'/../vendor/autoload.php')) {
     require __DIR__.'/../vendor/autoload.php';
 } else {
     require __DIR__.'/../../../autoload.php';
@@ -29,7 +29,7 @@ $app = new Application('Valet+ Reforged', $version->getVersion());
 /**
  * Prune missing directories and symbolic links on every command.
  */
-if (is_dir(VALET_HOME_PATH)) {
+if (\is_dir(VALET_HOME_PATH)) {
     Configuration::prune();
 
     Site::pruneLinks();
@@ -39,20 +39,24 @@ if (is_dir(VALET_HOME_PATH)) {
  * Allow Valet to be run more conveniently by allowing the Node proxy to run password-less sudo.
  */
 $app->command('install [--with-mariadb]', function ($withMariadb) {
+
+    # check php and other installation problems
     PhpFpm::checkInstallation();
 
+    # stop all running services
     Nginx::stop();
     PhpFpm::stop();
     Mysql::stop();
     RedisTool::stop();
 
+    # check if one port is already in use
     Script::portCheck();
 
+    # install all services and binaries
     DevTools::install();
     Binaries::installBinaries();
     Configuration::install();
     Elasticsearch::install();
-
     $domain = Nginx::install();
     PhpFpm::install();
     DnsMasq::install();
@@ -65,9 +69,9 @@ $app->command('install [--with-mariadb]', function ($withMariadb) {
         return;
     }
 
+    # setup
     Valet::symlinkToUsersBin();
     Mysql::setRootPassword();
-
     Mailhog::updateDomain($domain);
     Elasticsearch::updateDomain($domain);
 
@@ -79,7 +83,7 @@ $app->command('install [--with-mariadb]', function ($withMariadb) {
  * Fix common problems within the Valet+ installation.
  */
 $app->command('fix [--reinstall]', function ($reinstall) {
-    if (file_exists($_SERVER['HOME'] . '/.my.cnf')) {
+    if (\file_exists($_SERVER['HOME'] . '/.my.cnf')) {
         warning('You have an .my.cnf file in your home directory. This can affect the mysql installation negatively.');
     }
 
@@ -92,7 +96,7 @@ $app->command('fix [--reinstall]', function ($reinstall) {
 /**
  * Most commands are available only if valet is installed.
  */
-if (is_dir(VALET_HOME_PATH)) {
+if (\is_dir(VALET_HOME_PATH)) {
     /**
      * Get or set the domain currently being used by Valet.
      */
@@ -103,7 +107,6 @@ if (is_dir(VALET_HOME_PATH)) {
 
         Mailhog::updateDomain($domain);
         Elasticsearch::updateDomain($domain);
-
         DnsMasq::updateDomain(
             $oldDomain = Configuration::read()['domain'],
             $domain = trim($domain, '.')

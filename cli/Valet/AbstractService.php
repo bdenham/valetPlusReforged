@@ -25,7 +25,7 @@ abstract class AbstractService
      *
      * @return string
      */
-    public function getConfigClassName()
+    public function getConfigClassName(): string
     {
         if (!$this->configClassName) {
             try {
@@ -44,7 +44,7 @@ abstract class AbstractService
      *
      * @return bool
      */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         $config = $this->configuration->read();
         $name   = $this->getConfigClassName();
@@ -57,7 +57,7 @@ abstract class AbstractService
      *
      * @param $state
      */
-    public function setEnabled($state)
+    public function setEnabled(bool $state): void
     {
         $config        = $this->configuration->read();
         $name          = $this->getConfigClassName();
@@ -71,7 +71,7 @@ abstract class AbstractService
     /**
      * Stops the service and stores in configuration it should not be started.
      */
-    public function disable()
+    public function disable(): void
     {
         $this->stop();
         $this->setEnabled(self::STATE_DISABLED);
@@ -80,7 +80,7 @@ abstract class AbstractService
     /**
      * Installs the service if not installed, restarts it and stores in configuration it should be started.
      */
-    public function enable()
+    public function enable(): void
     {
         $this->setEnabled(self::STATE_ENABLED);
         if ($this->installed()) {

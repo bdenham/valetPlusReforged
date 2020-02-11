@@ -15,11 +15,11 @@ class Mailhog extends AbstractService
     /**
      * Create a new instance.
      *
-     * @param  Brew          $brew
-     * @param  CommandLine   $cli
-     * @param  Filesystem    $files
-     * @param  Configuration $configuration
-     * @param  Site          $site
+     * @param Brew $brew
+     * @param CommandLine $cli
+     * @param Filesystem $files
+     * @param Configuration $configuration
+     * @param Site $site
      */
     public function __construct(
         Brew $brew,
@@ -27,10 +27,11 @@ class Mailhog extends AbstractService
         Filesystem $files,
         Configuration $configuration,
         Site $site
-    ) {
-        $this->cli   = $cli;
-        $this->brew  = $brew;
-        $this->site  = $site;
+    )
+    {
+        $this->cli = $cli;
+        $this->brew = $brew;
+        $this->site = $site;
         $this->files = $files;
         parent::__construct($configuration);
     }
@@ -40,7 +41,7 @@ class Mailhog extends AbstractService
      *
      * @return void
      */
-    public function install()
+    public function install(): void
     {
         if ($this->installed()) {
             info('[mailhog] already installed');
@@ -56,7 +57,7 @@ class Mailhog extends AbstractService
      *
      * @return bool
      */
-    public function installed()
+    public function installed(): bool
     {
         return $this->brew->installed('mailhog');
     }
@@ -66,7 +67,7 @@ class Mailhog extends AbstractService
      *
      * @return void
      */
-    public function restart()
+    public function restart(): void
     {
         if (!$this->installed() || !$this->isEnabled()) {
             return;
@@ -81,7 +82,7 @@ class Mailhog extends AbstractService
      *
      * @return void
      */
-    public function stop()
+    public function stop(): void
     {
         if (!$this->installed()) {
             return;
@@ -96,12 +97,15 @@ class Mailhog extends AbstractService
      *
      * @return void
      */
-    public function uninstall()
+    public function uninstall(): void
     {
         $this->stop();
     }
 
-    public function updateDomain($domain)
+    /**
+     * @param string $domain
+     */
+    public function updateDomain(string $domain): void
     {
         $this->files->putAsUser(
             self::NGINX_CONFIGURATION_PATH,

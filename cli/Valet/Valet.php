@@ -29,7 +29,7 @@ class Valet
      *
      * @return void
      */
-    public function symlinkToUsersBin()
+    public function symlinkToUsersBin(): void
     {
         $this->cli->quietlyAsUser('rm ' . $this->valetBin);
 
@@ -41,7 +41,7 @@ class Valet
      *
      * @return array
      */
-    public function extensions()
+    public function extensions(): array
     {
         if (!$this->files->isDir(VALET_HOME_PATH . '/Extensions')) {
             return [];
@@ -62,12 +62,12 @@ class Valet
      *
      * @return void
      */
-    function createSudoersEntry()
+    function createSudoersEntry(): void
     {
         $this->files->ensureDirExists(self::SUDOERS_PATH);
 
-        $this->files->put(self::SUDOERS_PATH . '/valet', 'Cmnd_Alias VALET = /usr/local/bin/valet *
-%admin ALL=(root) NOPASSWD:SETENV: VALET' . PHP_EOL);
+        $this->files->put(self::SUDOERS_PATH . '/valet', \sprintf('Cmnd_Alias VALET = %s *
+%admin ALL=(root) NOPASSWD:SETENV: VALET %s', $this->valetBin, PHP_EOL));
     }
 
     /**
@@ -75,7 +75,7 @@ class Valet
      *
      * @return void
      */
-    function removeSudoersEntry()
+    function removeSudoersEntry(): void
     {
         $this->cli->quietly(sprintf('rm %s/valet', self::SUDOERS_PATH));
     }
@@ -86,6 +86,7 @@ class Valet
      * @param string $currentVersion
      *
      * @return bool|int
+     * @throws \Httpful\Exception\ConnectionErrorException
      */
     public function onLatestVersion($currentVersion)
     {
